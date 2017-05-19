@@ -1,4 +1,5 @@
-/* Copyright 2017 Esri
+package com.esri.android.mapbook;
+/* Copyright 2016 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,18 +22,6 @@
  * email: contracts@esri.com
  *
  */
-package com.esri.android.mapbook;
 
-import dagger.Component;
-
-/**
- * An interface associating injections with targets.
- * It provides a call and scope to where we want to inject.
- */
-
-@Component (modules = {ApplicationModule.class})
-
-
-public interface ApplicationComponent extends AndroidComponent {
-  void inject(MapBookApplication target);
+public interface AndroidComponent {
 }

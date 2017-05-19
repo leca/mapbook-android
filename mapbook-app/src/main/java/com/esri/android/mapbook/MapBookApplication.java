@@ -41,13 +41,13 @@ import android.app.Application;
 
 public class MapBookApplication extends Application {
 
-  private ApplicationComponent component; // application works as a container for component.  Component is used for entire app.
+  private AndroidComponent component; // application works as a container for component.  Component is used for entire app.
 
   @Override
   public void onCreate(){
     super.onCreate();
     buildComponentAndInject();
-    component = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(getApplicationContext())).build();
+  //  component = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(getApplicationContext())).build();
 
   }
   private void buildComponentAndInject(){
@@ -55,12 +55,12 @@ public class MapBookApplication extends Application {
   }
 
 
-  public ApplicationComponent getComponent(){
+  public AndroidComponent getComponent(){
     return component;
   }
 
   private final static class DaggerComponentInitializer {
-    public static ApplicationComponent init (final MapBookApplication app){
+    public static AndroidComponent init (final MapBookApplication app){
       return DaggerApplicationComponent.builder()
           .applicationModule(new ApplicationModule(app.getApplicationContext()))
           .build();

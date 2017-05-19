@@ -29,6 +29,7 @@ package com.esri.android.mapbook.map;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import com.esri.android.mapbook.ApplicationComponent;
 import com.esri.android.mapbook.ApplicationModule;
 import com.esri.android.mapbook.MapBookApplication;
 import com.esri.android.mapbook.R;
@@ -80,7 +81,7 @@ public class MapActivity extends AppCompatActivity {
       ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, R.id.mapLinearLayout);
     }
     // Ask the component to inject this activity
-    DaggerMapComponent.builder().applicationComponent(((MapBookApplication) getApplication())
+    DaggerMapComponent.builder().applicationComponent((ApplicationComponent)((MapBookApplication) getApplication())
         .getComponent()).applicationModule(new ApplicationModule(getApplicationContext())).mapModule(new MapModule(fragment)).build().inject(this);
 
   }

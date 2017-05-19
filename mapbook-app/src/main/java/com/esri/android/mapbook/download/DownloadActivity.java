@@ -29,6 +29,7 @@ package com.esri.android.mapbook.download;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import com.esri.android.mapbook.ApplicationComponent;
 import com.esri.android.mapbook.ApplicationModule;
 import com.esri.android.mapbook.MapBookApplication;
 import com.esri.android.mapbook.mapbook.MapbookFragment;
@@ -74,7 +75,7 @@ public class DownloadActivity extends AppCompatActivity {
       ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), fragment, "downloadFragment");
     }
     Log.i(TAG, "Initializing Dagger component...");
-    DaggerDownloadComponent.builder().applicationComponent(((MapBookApplication) getApplication())
+    DaggerDownloadComponent.builder().applicationComponent((ApplicationComponent)((MapBookApplication) getApplication())
         .getComponent())
         .applicationModule(new ApplicationModule(getApplicationContext()))
         .downloadModule(new DownloadModule(fragment, this))

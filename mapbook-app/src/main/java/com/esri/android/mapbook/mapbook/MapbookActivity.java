@@ -39,6 +39,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import com.esri.android.mapbook.ApplicationComponent;
 import com.esri.android.mapbook.ApplicationModule;
 import com.esri.android.mapbook.MapBookApplication;
 import com.esri.android.mapbook.R;
@@ -115,7 +116,7 @@ public class MapbookActivity extends AppCompatActivity implements ActivityCompat
     }
 
     // Load presenter
-    DaggerMapbookComponent.builder().applicationComponent(((MapBookApplication) getApplication())
+    DaggerMapbookComponent.builder().applicationComponent((ApplicationComponent)((MapBookApplication) getApplication())
         .getComponent()).applicationModule(new ApplicationModule(getApplicationContext())).mapbookModule(new MapbookModule(mapbookFragment)).build().inject(this);
 
     checkForUpdatedPortalItem();

@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import com.esri.android.mapbook.ApplicationComponent;
 import com.esri.android.mapbook.ApplicationModule;
 import com.esri.android.mapbook.MapBookApplication;
 import com.esri.android.mapbook.R;
@@ -62,7 +63,7 @@ public class PortalItemUpdateService extends IntentService {
   @Override
   public void onCreate() {
     super.onCreate();
-    DaggerDownloadComponent.builder().applicationComponent(((MapBookApplication) getApplication())
+    DaggerDownloadComponent.builder().applicationComponent((ApplicationComponent)((MapBookApplication) getApplication())
         .getComponent())
         .applicationModule(new ApplicationModule(getApplicationContext()))
         .downloadModule(new DownloadModule())
