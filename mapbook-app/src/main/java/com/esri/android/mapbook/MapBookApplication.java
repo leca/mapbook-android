@@ -46,15 +46,17 @@ public class MapBookApplication extends Application {
   @Override
   public void onCreate(){
     super.onCreate();
-    buildComponentAndInject();
+    buildComponent();
   //  component = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(getApplicationContext())).build();
 
   }
-  private void buildComponentAndInject(){
+  private void buildComponent(){
     component = DaggerComponentInitializer.init(this);
   }
 
-
+  public AndroidComponent createComponent(){
+    return DaggerComponentInitializer.init(this);
+  }
   public AndroidComponent getComponent(){
     return component;
   }

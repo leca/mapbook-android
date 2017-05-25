@@ -81,7 +81,7 @@ public class FileManager implements FileManagerContract {
    * Returns a null string if file doesn't exist.
    * @return - String
    */
-  final public String fileExists(){
+   public String fileExists(){
     String path = null;
     file = new File(createMobileMapPackageFilePath());
     Log.i("FileManager", "Searching for file " + createMobileMapPackageFilePath());

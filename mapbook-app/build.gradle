@@ -9,8 +9,9 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+      //  versionName "1.0"
+       //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'com.esri.android.mapbook.MockTestRunner'
     }
     buildTypes {
         release {
@@ -36,8 +37,17 @@ dependencies {
     provided 'javax.annotation:jsr250-api:1.0'
 
     androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.espressoCoreVersion", {
-        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'javax.inject'
     })
+
+//    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$rootProject.espressoCoreVersion", {
+//        exclude module: 'support-annotations'
+//
+//        exclude module: 'support-v4'
+//        exclude module: 'appcompat-v7'
+//        exclude module: 'design'
+//        exclude module: 'recyclerview-v7'
+//    })
 
     androidTestCompile "com.android.support.test:runner:$rootProject.runnerVersion"
     androidTestCompile "com.android.support.test:rules:$rootProject.runnerVersion"
@@ -46,4 +56,12 @@ dependencies {
 
     testCompile "junit:junit:$rootProject.ext.junitVersion"
     compile 'com.android.support.constraint:constraint-layout:1.0.0'
+
+    // required if you want to use Mockito for unit tests
+   // testCompile 'org.mockito:mockito-core:2.8.9'
+    // required if you want to use Mockito for Android tests
+    androidTestCompile 'org.mockito:mockito-android:2.8.9'
+
+    androidTestApt "com.google.dagger:dagger-compiler:$rootProject.daggerVerison"
+
 }

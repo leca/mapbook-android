@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.esri.android.mapbook.R;
 import com.esri.android.mapbook.map.MapActivity;
 import com.esri.android.mapbook.mapbook.MapbookActivity;
 import com.esri.arcgisruntime.geometry.Geometry;

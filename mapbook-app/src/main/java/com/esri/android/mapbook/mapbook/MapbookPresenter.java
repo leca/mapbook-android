@@ -59,7 +59,7 @@ public class MapbookPresenter implements MapbookContract.Presenter {
   @Inject CredentialCryptographer mCredentialCryptopgrapher;
 
   @Inject
-  MapbookPresenter (final FileManager manager, final MapbookContract.View view) {
+  public MapbookPresenter (final FileManager manager, final MapbookContract.View view) {
     mFileManager = manager;
     mView = view;
   }
