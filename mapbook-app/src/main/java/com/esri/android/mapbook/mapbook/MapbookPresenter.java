@@ -232,7 +232,7 @@ public class MapbookPresenter implements MapbookContract.Presenter {
   private void checkForUserName(){
     if (getUserName()== null){
       try {
-        mCredentialCryptopgrapher.setUserNameFromCredentials(null);
+        mCredentialCryptopgrapher.setUserNameFromCredentials(null, Constants.CRED_FILE, Constants.ALIAS);
         mView.setUserName(getUserName());
       } catch (Exception e) {
         Log.e(TAG, e.getClass().getSimpleName() + " " + e.getMessage());

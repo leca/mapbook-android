@@ -65,7 +65,6 @@ public class CredentialCryptographer {
   private static final String TAG = CredentialCryptographer.class.getSimpleName();
   private static final String CIPHER_TYPE = "AES/GCM/NoPadding";
   private static final String AndroidKeyStore = "AndroidKeyStore";
-  private static final String ALIAS = "CRED_KEY";
   private String mUserName = null;
 
   @Inject Context mContext;
@@ -78,19 +77,19 @@ public class CredentialCryptographer {
    * Entry point for encrypting bytes. Encryption/decryption
    * methods are dependent on underlying OS Version.
    * @param bytes - array of bytes to encrypt
-   * @return - File path representing location of encrypted data.
+   * @return - String representing the file location of the encrypted data.
    * @throws Exception - related to encryption/decryption
    */
-  public String encrypt(final byte[] bytes, final String filePath) throws Exception{
-    return encryptData(bytes, filePath);
+  public String encrypt(final byte[] bytes, final String filePath, String alias) throws Exception{
+    return encryptData(bytes, filePath, alias);
   }
 
   /**
    * Entry point for decrypting a file given
    * @return String representing decrypted data
    */
-  public String decrypt() throws Exception{
-    return decryptData(Constants.CRED_FILE);
+  public String decrypt(String filePath, String alias) throws Exception{
+    return decryptData(filePath,alias);
   }
 
   /**
@@ -106,7 +105,7 @@ public class CredentialCryptographer {
   /**
    * Create a new key in the Keystore
    */
-  private void createNewKey(){
+  private void createNewKey(String alias){
     try {
       final KeyStore keyStore = KeyStore.getInstance(AndroidKeyStore);
       keyStore.load(null);
@@ -115,7 +114,7 @@ public class CredentialCryptographer {
 
       // Build one key to be used for encrypting and decrypting the file
       keyGenerator.init(
-          new KeyGenParameterSpec.Builder(ALIAS,
+          new KeyGenParameterSpec.Builder(alias,
               KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
               .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
               .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
@@ -154,7 +153,7 @@ public class CredentialCryptographer {
    * @return String representing encrypted file or null if encryption fails.
    * @throws Exception - Throws Exceptions related to encryption
    */
-  private String encryptData(final byte [] input,  final String fileName) throws Exception{
+  private String encryptData(final byte [] input,  final String fileName, String alias) throws Exception{
 
     String encryptedDataFilePath;
 
@@ -162,10 +161,10 @@ public class CredentialCryptographer {
     keyStore.load(null);
 
     // Does the key need to be created?
-    if (!keyStore.containsAlias(ALIAS)){
-      createNewKey();
+    if (!keyStore.containsAlias(alias)){
+      createNewKey(alias);
     }
-    final SecretKey key = (SecretKey) keyStore.getKey(ALIAS, null);
+    final SecretKey key = (SecretKey) keyStore.getKey(alias, null);
 
     final Cipher c = Cipher.getInstance(CIPHER_TYPE);
     c.init(Cipher.ENCRYPT_MODE, key);
@@ -195,12 +194,12 @@ public class CredentialCryptographer {
    * @return Decrypted string or null if decryption fails
    * @throws Exception related to decryption
    */
-  private String decryptData (final String encryptedDataFileName) throws Exception{
+  private String decryptData (final String encryptedDataFileName, String alias) throws Exception{
     String decryptedString;
 
     final KeyStore keyStore = KeyStore.getInstance(AndroidKeyStore);
     keyStore.load(null);
-    final SecretKey key = (SecretKey) keyStore.getKey(ALIAS, null);
+    final SecretKey key = (SecretKey) keyStore.getKey(alias, null);
 
     final Cipher c = Cipher.getInstance(CIPHER_TYPE);
 
@@ -251,9 +250,9 @@ public class CredentialCryptographer {
    *                            encrypted credential file on device.
    * @throws Exception related to decrypting credentials or parsing JSON.
    */
-  public void setUserNameFromCredentials(@Nullable String jsonCredentialCache) throws Exception{
+  public void setUserNameFromCredentials(@Nullable String jsonCredentialCache, String filepath, String alias) throws Exception{
     if (jsonCredentialCache == null){
-      jsonCredentialCache = this.decrypt();
+      jsonCredentialCache = this.decrypt(filepath, alias);
     }
     if (jsonCredentialCache != null && jsonCredentialCache.length() > 0){
 

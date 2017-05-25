@@ -45,4 +45,7 @@ public class Constants {
 
   // Message indicating there's no update
   public static final String NO_UPDATE_AVAILABLE = "You have the latest version";
+
+  // Name of the key used to encrypt/decrypt credentials
+  public static final String ALIAS = "CRED_KEY";
 }

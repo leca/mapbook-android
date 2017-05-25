@@ -153,7 +153,7 @@ public class DownloadPresenter implements DownloadContract.Presenter {
 
           // Set user name from credential cache JSON
           try {
-            mCredentialCryptographer.setUserNameFromCredentials(jsonCredentials);
+            mCredentialCryptographer.setUserNameFromCredentials(jsonCredentials, Constants.CRED_FILE, Constants.ALIAS);
           } catch (Exception e) {
             Log.e(TAG, e.getClass().getSimpleName() + " " + e.getMessage());
             if (e.getCause() != null){
@@ -164,7 +164,7 @@ public class DownloadPresenter implements DownloadContract.Presenter {
           // Encrypt json credentials on device
           final String filePath;
           try {
-            filePath = mCredentialCryptographer.encrypt(jsonCredentials.getBytes(Charset.forName("UTF-8")), Constants.CRED_FILE);
+            filePath = mCredentialCryptographer.encrypt(jsonCredentials.getBytes(Charset.forName("UTF-8")), Constants.CRED_FILE, Constants.ALIAS);
             Log.i(TAG, "Data encrypted to file path = " + filePath);
           } catch (Exception e) {
             Log.e(TAG, e.getClass().getSimpleName() + " " + e.getMessage());
@@ -211,7 +211,7 @@ public class DownloadPresenter implements DownloadContract.Presenter {
 
     final String credentialString;
     try {
-      credentialString = mCredentialCryptographer.decrypt();
+      credentialString = mCredentialCryptographer.decrypt(Constants.CRED_FILE, Constants.ALIAS);
       if (credentialString != null && credentialString.length() > 0 ){
         Log.i(TAG,"Downloading with cached credentials");
 

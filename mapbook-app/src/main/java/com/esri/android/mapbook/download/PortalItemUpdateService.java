@@ -31,10 +31,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import com.esri.android.mapbook.ApplicationComponent;
-import com.esri.android.mapbook.ApplicationModule;
-import com.esri.android.mapbook.MapBookApplication;
-import com.esri.android.mapbook.R;
+import com.esri.android.mapbook.*;
 import com.esri.arcgisruntime.portal.Portal;
 import com.esri.arcgisruntime.portal.PortalItem;
 import com.esri.arcgisruntime.security.AuthenticationManager;
@@ -81,7 +78,7 @@ public class PortalItemUpdateService extends IntentService {
 
     try {
 
-      credentialString = mCredCryptographer.decrypt();
+      credentialString = mCredCryptographer.decrypt(Constants.CRED_FILE, Constants.ALIAS);
 
       if ( credentialString == null || credentialString.length() == 0  ) {
         handleDecryptionFailure();

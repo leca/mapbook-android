@@ -3,25 +3,17 @@ package com.esri.android.mapbook;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import com.esri.android.mapbook.MapBookApplication;
-import com.esri.android.mapbook.R;
-import com.esri.android.mapbook.data.FileManager;
-import com.esri.android.mapbook.mapbook.MapbookActivity;
-import org.junit.Assert;
+import com.esri.android.mapbook.download.CredentialCryptographer;
+import com.esri.android.mapbook.download.DownloadActivity;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 import javax.inject.Inject;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /* Copyright 2016 Esri
  *
@@ -47,32 +39,42 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  *
  */
 @RunWith(AndroidJUnit4.class)
-public class MapbookActivityTest {
+public class CryptographerTest {
 
-  @Rule public final ActivityTestRule<MapbookActivity> main =
-      new ActivityTestRule<MapbookActivity>(MapbookActivity.class,
+  @Inject CredentialCryptographer credentialCryptographer;
+
+  @Rule public final ActivityTestRule<DownloadActivity> main =
+      new ActivityTestRule<DownloadActivity>(DownloadActivity.class,
           true,     // initialTouchMode
           false);   // launchActivity. False so we can customize the intent per test method
-
-  @Inject FileManager fileManager;
 
   @Before
   public void setUp() {
     Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
     MapBookApplication app
         = (MapBookApplication) instrumentation.getTargetContext().getApplicationContext();
-    TestComponent component = (TestComponent) app.createComponent();
-    component.inject(this);
+
+    DaggerTestComponent.builder().mockApplicationModule(new MockApplicationModule(app)).mockMapbookModule(new MockMapbookModule()).build().inject(this);
   }
 
   @Test
-  public void shouldBeAbleToLaunchMainScreen(){
+  public void testEncryptDecrypt(){
     // Launch activity
     main.launchActivity(new Intent());
-    onView(withText(main.getActivity().getString(R.string.title))).check(ViewAssertions.matches(isDisplayed()));
-    Assert.assertTrue(fileManager != null);
-    // Configure the mock
-    Mockito.when(fileManager.fileExists()).thenReturn(null);
-    Assert.assertNull(fileManager.fileExists());
+    Assert.assertNotNull(credentialCryptographer);
+    String filename = "test_cred";
+    String testString = "This is a test string";
+    String testAlias = "TEST_ALIAS";
+    byte[] data = testString.getBytes();
+
+    try {
+      String path = credentialCryptographer.encrypt(data,filename, testAlias);
+      String decryptedString = credentialCryptographer.decrypt(filename, testAlias);
+      Assert.assertEquals(testString, decryptedString);
+    } catch (Exception e) {
+      e.printStackTrace();
+      Assert.fail();
+    }
   }
 }
+

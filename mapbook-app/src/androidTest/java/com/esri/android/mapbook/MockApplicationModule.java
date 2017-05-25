@@ -23,14 +23,30 @@ package com.esri.android.mapbook;
  *
  */
 
+import android.content.Context;
+import com.esri.android.mapbook.download.CredentialCryptographer;
 import com.esri.android.mapbook.util.MapbookApplicationScope;
-import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
+import org.mockito.Mockito;
+@Module
+public class MockApplicationModule {
+  private final Context mContext;
 
-@MapbookApplicationScope
-@Component(modules = {MockMapbookModule.class, MockApplicationModule.class})
+  public MockApplicationModule(final Context context)
+  {
+    mContext = context;
+  }
 
-public interface TestComponent extends AndroidComponent {
-  void inject(MapbookActivityTest target);
-  void inject(CryptographerTest target);
+  @Provides
+  @MapbookApplicationScope
+  public Context provideContext(){
+    return mContext;
+  }
 
+  @Provides
+  @MapbookApplicationScope
+  public CredentialCryptographer providesCredentialManager(final Context context){
+    return new CredentialCryptographer( context);
+  }
 }
